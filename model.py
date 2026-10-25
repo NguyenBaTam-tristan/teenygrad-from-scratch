@@ -237,8 +237,18 @@ class Neg(Function):
         # TODO: return the negated incoming gradient
         return grad_output.e(UnaryOps.NEG)
 
-# Step 17 - Relu (not yet solved)
-# TODO: implement
+# Step 17 - Relu
+class Relu(Function):
+    def forward(self, x):
+        # TODO: apply the rectified linear unit to lazy buffer x and cache the result
+        self.ret = x.e(UnaryOps.RELU)
+        return self.ret
+
+    def backward(self, grad_output):
+        # TODO: route the upstream gradient only through positions that were positive
+        zero = const(0.0, self.ret.shape)
+        mask = lazybuffer_binary_e(zero, BinaryOps.CMPLT, self.ret)
+        return lazybuffer_binary_e(grad_output, BinaryOps.MUL, mask)
 
 # Step 18 - Log (not yet solved)
 # TODO: implement
