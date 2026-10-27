@@ -320,8 +320,19 @@ class Sub(Function):
         grad_y = grad_output.e(UnaryOps.NEG) if self.needs_input_grad[1] else None
         return grad_x, grad_y
 
-# Step 24 - Mul (not yet solved)
-# TODO: implement
+# Step 24 - Mul
+class Mul(Function):
+    def forward(self, x, y):
+        # TODO: compute the elementwise product and save what backward needs
+        self.x = x
+        self.y = y
+        return lazybuffer_binary_e(x, BinaryOps.MUL, y)
+
+    def backward(self, grad_output):
+        # TODO: return the gradient w.r.t. each input (None if not needed)
+        grad_x = lazybuffer_binary_e(grad_output, BinaryOps.MUL, self.y) if self.needs_input_grad[0] else None
+        grad_y = lazybuffer_binary_e(grad_output, BinaryOps.MUL, self.x) if self.needs_input_grad[1] else None
+        return grad_x, grad_y
 
 # Step 25 - Div (not yet solved)
 # TODO: implement
